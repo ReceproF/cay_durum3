@@ -1,6 +1,1 @@
-{
-    "durum": "Çay Hazır",  // Çayın hazır olup olmadığı bilgisi
-    "kaynamasüresi": 10,  // Suyun kaynaması için kalan süre (dakika)
-    "cay_durumu": "Çay Hazır Değil",  // Mevcut çay durumu
-    "kaynama_suresi": null  // Kaynama süresi bilgisinin henüz girilmemiş veya boş olduğu
-}
+
