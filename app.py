@@ -7,9 +7,9 @@ app = Flask(__name__)
 tea_status = "Çay Hazır Değil"  # Çayın mevcut durumu
 tea_timer = 0  # Çay hazır olmasına kalan süre (dakika)
 water_timer = 0  # Su kaynama süresi (dakika)
-tea_stock = "10"  # Mevcut çay paket sayısı
-tea_times = "10:00, 14:00, 16:00"  # Gün içindeki çay saatleri
-tea_money = "50 TL - 01.01.2024"  # Toplanan çay parası ve tarihi
+tea_stock = "2"  # Mevcut çay paket sayısı
+tea_times = "08.45, 13.35"  # Gün içindeki çay saatleri
+tea_money = "0 TL - 01.01.2025"  # Toplanan çay parası ve tarihi
 
 # Ana sayfa: Çay durumu, sayaçlar ve stok bilgilerini gösterir
 @app.route('/')
