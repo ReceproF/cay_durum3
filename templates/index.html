@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Çay Durumu Sistemi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        .header {
+            background-color: #007bff;
+            color: white;
+            text-align: center;
+            padding: 15px 0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+            padding: 20px;
+        }
+        .status-box {
+            border: 1px solid #007bff;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 10px;
+            text-align: center;
+            width: 80%;
+            max-width: 400px;
+            background-color: #e9ecef;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .status-box.green {
+            background-color: #d4edda; /* Çay hazır: yeşil */
+            color: #155724;
+        }
+        .status-box.red {
+            background-color: #f8d7da; /* Çay hazır değil: kırmızı */
+            color: #721c24;
+        }
+        .footer {
+            display: flex;
+            justify-content: space-around;
+            padding: 20px 0;
+            background-color: #f1f1f1;
+            box-shadow: 0 -4px 8px rgba(0,0,0,0.1);
+        }
+        .footer-box {
+            text-align: center;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            width: 30%;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Çay Durumu Sistemi</h1>
+    </div>
+    <div class="content">
+        <div id="tea-box" class="status-box red">
+            <h2>Çayın Durumu:</h2>
+            <p id="tea-status">Durum yükleniyor...</p>
+            <p id="tea-timer">Sayaç yükleniyor...</p>
+        </div>
+        <div id="water-box" class="status-box">
+            <h2>Suyun Durumu:</h2>
+            <p id="water-status">Durum yükleniyor...</p>
+            <p id="water-timer">Sayaç yükleniyor...</p>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="footer-box">
+            <h3>Mevcut Paket Çay:</h3>
+            <p id="tea-stock">Yükleniyor...</p>
+        </div>
+        <div class="footer-box">
+            <h3>Muhtemel Çay Saatleri:</h3>
+            <p id="tea-times">Yükleniyor...</p>
+        </div>
+        <div class="footer-box">
+            <h3>Çay İçin Toplanan Para ve Tarihi:</h3>
+            <p id="tea-money">Yükleniyor...</p>
+        </div>
+    </div>
+
+    <script>
+        async function fetchStatus() {
+            try {
+                const response = await fetch('/status');
+                const data = await response.json();
+                
+                // Çayın durumu
+                const teaBox = document.getElementById('tea-box');
+                if (data.tea_status === "Çay Hazır") {
+                    teaBox.classList.remove('red');
+                    teaBox.classList.add('green');
+                    document.getElementById('tea-status').innerText = data.tea_status;
+                } else {
+                    teaBox.classList.remove('green');
+                    teaBox.classList.add('red');
+                    document.getElementById('tea-status').innerText = data.tea_status;
+                }
+
+                // Çay sayaç
+                if (data.tea_timer > 0) {
+                    document.getElementById('tea-timer').innerText = `Çayın olmasına ${data.tea_timer} dakika kaldı.`;
+                } else {
+                    document.getElementById('tea-timer').innerText = "";
+                }
+
+                // Suyun durumu
+                const waterBox = document.getElementById('water-box');
+                if (data.water_timer > 0) {
+                    document.getElementById('water-status').innerText = `Kaynamasına ${data.water_timer} dakika kaldı.`;
+                } else {
+                    document.getElementById('water-status').innerText = "Su Hazır!";
+                }
+
+                // Alt kısım bilgileri
+                document.getElementById('tea-stock').innerText = data.tea_stock;
+                document.getElementById('tea-times').innerText = data.tea_times;
+                document.getElementById('tea-money').innerText = data.tea_money;
+            } catch (error) {
+                console.error('Durum alınırken bir hata oluştu:', error);
+            }
+        }
+
+        function startWaterTimer() {
+            setInterval(async () => {
+                try {
+                    const response = await fetch('/decrease-timer', { method: 'POST' });
+                    const data = await response.json();
+                    
+                    if (data.water_timer >= 0) {
+                        fetchStatus();
+                    }
+                } catch (error) {
+                    console.error('Geri sayım sırasında bir hata oluştu:', error);
+                }
+            }, 60000);
+        }
+
+        fetchStatus();
+        startWaterTimer();
+    </script>
+</body>
+</html>
