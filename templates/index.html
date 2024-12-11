@@ -9,57 +9,57 @@
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f8f9fa;
+            background-color: #f8f9fa; /* Sayfa arka planının rengini ayarlar */
         }
         .header {
-            background-color: #007bff;
-            color: white;
-            text-align: center;
-            padding: 15px 0;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            background-color: #007bff; /* Üst kısım arka plan rengi */
+            color: white; /* Üst kısım yazı rengi */
+            text-align: center; /* Metni ortaya hizalar */
+            padding: 15px 0; /* Üst kısım iç boşluğunu ayarlar */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Üst kısıma gölge ekler */
         }
         .content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 70vh;
+            display: flex; /* Esnek bir kutu modeli kullanır */
+            flex-direction: column; /* Elemanlar dikey olarak dizilir */
+            align-items: center; /* Elemanlar ortalanır */
+            justify-content: center; /* Dikey merkezleme */
+            min-height: 70vh; /* Minimum yükseklik ayarı */
             padding: 20px;
         }
         .status-box {
-            border: 1px solid #007bff;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 10px;
-            text-align: center;
-            width: 80%;
-            max-width: 400px;
-            background-color: #e9ecef;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            border: 1px solid #007bff; /* Kutunun kenar rengini ayarlar */
+            border-radius: 10px; /* Kenar köşelerini yuvarlar */
+            padding: 20px; /* Kutunun iç boşluğunu ayarlar */
+            margin: 10px; /* Kutunun dış boşluğunu ayarlar */
+            text-align: center; /* Metni ortaya hizalar */
+            width: 80%; /* Genişliği ayarlar */
+            max-width: 400px; /* Maksimum genişlik */
+            background-color: #e9ecef; /* Arka plan rengi */
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Gölge ekler */
         }
         .status-box.green {
-            background-color: #d4edda; /* Çay hazır: yeşil */
-            color: #155724;
+            background-color: #d4edda; /* Çay hazır: yeşil arka plan */
+            color: #155724; /* Yazı rengi */
         }
         .status-box.red {
-            background-color: #f8d7da; /* Çay hazır değil: kırmızı */
-            color: #721c24;
+            background-color: #f8d7da; /* Çay hazır değil: kırmızı arka plan */
+            color: #721c24; /* Yazı rengi */
         }
         .footer {
-            display: flex;
-            justify-content: space-around;
-            padding: 20px 0;
-            background-color: #f1f1f1;
-            box-shadow: 0 -4px 8px rgba(0,0,0,0.1);
+            display: flex; /* Esnek kutu modeli */
+            justify-content: space-around; /* Elemanları eşit boşluklarla dizer */
+            padding: 20px 0; /* İç boşluğu ayarlar */
+            background-color: #f1f1f1; /* Arka plan rengi */
+            box-shadow: 0 -4px 8px rgba(0,0,0,0.1); /* Alt gölge ekler */
         }
         .footer-box {
-            text-align: center;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 10px;
-            width: 30%;
-            background-color: #fff;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-align: center; /* Metni ortaya hizalar */
+            padding: 10px; /* İç boşluğu ayarlar */
+            border: 1px solid #ccc; /* Kenar rengini ayarlar */
+            border-radius: 10px; /* Kenar köşelerini yuvarlar */
+            width: 30%; /* Genişliği ayarlar */
+            background-color: #fff; /* Arka plan rengi */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Hafif gölge ekler */
         }
     </style>
 </head>
@@ -148,9 +148,10 @@
                 } catch (error) {
                     console.error('Geri sayım sırasında bir hata oluştu:', error);
                 }
-            }, 60000);
+            }, 60000); // Her dakika sayaçları günceller
         }
 
+        // Sayfa yüklendiğinde durumu kontrol eder ve geri sayaç başlatır
         fetchStatus();
         startWaterTimer();
     </script>
