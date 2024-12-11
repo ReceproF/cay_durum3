@@ -1,66 +1,155 @@
-/* index.html */
 <!DOCTYPE html>
-<html>
+<html lang="tr">
 <head>
-    <title>Çay Durumu</title>
-</head>
-<body>
-    <h1>Çay Durumu</h1>
-    <p id="cayDurumu">Çay hazır değil</p>
-    <footer id="footerInfo">Footer bilgisi burada görünecek</footer>
-</body>
-<script>
-    // index.html script kısmı 
-    const footer = document.getElementById('footerInfo');
-    fetch('footerData.json') // backend'deki footerData.json dosyasından bilgi alıyor
-        .then(response => response.json())
-        .then(data => {
-            footer.textContent = data.footerInfo;
-        });
-</script>
-</html>
-
-
-/* admin.html */
-<!DOCTYPE html>
-<html>
-<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Paneli</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .header {
+            background-color: #FF5722;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 2em;
+        }
+        .container {
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        .section {
+            background-color: #F5F5F5;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+        }
+        h2 {
+            margin-bottom: 10px;
+            font-size: 1.5em;
+        }
+        button {
+            font-size: 1em;
+            padding: 10px;
+            margin: 5px;
+            border: none;
+            cursor: pointer;
+        }
+        .green-button {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .grey-button {
+            background-color: #9E9E9E;
+            color: white;
+        }
+        .water-button {
+            background-color: #E0E0E0;
+            color: #333;
+        }
+        .water-button.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        input {
+            font-size: 1em;
+            padding: 10px;
+            margin: 5px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Admin Paneli</h1>
-    <form id="updateFooterForm">
-        <label for="footerInput">Alt Bilgiyi Güncelle:</label>
-        <input type="text" id="footerInput" name="footerInput">
-        <button type="submit">Güncelle</button>
-    </form>
-    <p id="message"></p>
-</body>
-<script>
-    // admin.html script kısmı
-    document.getElementById('updateFooterForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        const footerInput = document.getElementById('footerInput').value;
+    <div class="header">Admin Paneli</div>
+    <div class="container">
+        <!-- Çay Durumu Yönetimi -->
+        <div class="section">
+            <h2>Çay Durumu Yönetimi:</h2>
+            <button class="green-button" onclick="updateTeaStatus('Çay Hazır')">Çay Hazır!</button>
+            <button class="grey-button" onclick="updateTeaStatus('Çay Hazır Değil')">Çay Hazır Değil!</button>
+            <button class="grey-button" onclick="updateTeaStatus('Çay Bitmek Üzere')">Çay Bitmek Üzere!</button>
+            <button class="grey-button" onclick="updateTeaStatus('Çay Bitti')">Çay Bitti!</button>
+            <label for="tea-timer">Çayın olmasına (dakika): </label>
+            <input type="number" id="tea-timer" placeholder="Dakika">
+            <button onclick="updateTeaTimer()">Sayaç Güncelle</button>
+        </div>
+        <!-- Su Durumu Yönetimi -->
+        <div class="section">
+            <h2>Su Durumu Yönetimi:</h2>
+            <button class="water-button active" onclick="updateWaterStatus(0)">Su Hazır!</button>
+            <label for="water-timer">Kaynamasına (dakika): </label>
+            <input type="number" id="water-timer" placeholder="Dakika">
+            <button onclick="updateWaterTimer()">Sayaç Güncelle</button>
+        </div>
+        <!-- Alt Kısım Bilgileri Yönetimi -->
+        <div class="section">
+            <h2>Alt Kısım Bilgileri Yönetimi:</h2>
+            <label for="tea-stock-input">Mevcut Paket Çay: </label>
+            <input type="text" id="tea-stock-input" placeholder="Mevcut Paket Çay">
+            <label for="tea-times-input">Muhtemel Çay Saatleri: </label>
+            <input type="text" id="tea-times-input" placeholder="Muhtemel Çay Saatleri">
+            <label for="tea-money-input">Çay İçin Toplanan Para ve Tarihi: </label>
+            <input type="text" id="tea-money-input" placeholder="Çay İçin Toplanan Para ve Tarihi">
+            <button onclick="updateFooter()">Bilgileri Güncelle</button>
+        </div>
+    </div>
+    <script>
+        async function updateTeaStatus(status) {
+            await fetch('/update-tea-status', { 
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tea_status: status })
+            });
+            alert("Çay durumu güncellendi!");
+        }
 
-        fetch('/updateFooter', { // güncelleme isteği
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({ footerInfo: footerInput })
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                document.getElementById('message').textContent = 'Güncelleme başarılı!';
-            } else {
-                document.getElementById('message').textContent = 'Güncelleme başarısız.';
-            }
-        })
-        .catch(error => {
-            document.getElementById('message').textContent = 'Bir hata oluştu.';
-            console.error(error);
-        });
-    });
-</script>
+        async function updateTeaTimer() {
+            const minutes = document.getElementById('tea-timer').value;
+            await fetch('/update-tea-timer', { 
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tea_timer: minutes })
+            });
+            alert("Çay sayacı güncellendi!");
+        }
+
+        async function updateWaterStatus(minutes) {
+            await fetch('/update-water-status', { 
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ water_timer: minutes })
+            });
+            alert("Su kaynama durumu güncellendi!");
+        }
+
+        async function updateWaterTimer() {
+            const minutes = document.getElementById('water-timer').value;
+            await fetch('/update-water-status', { 
+                method: 'POST', 
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ water_timer: minutes })
+            });
+            alert("Su sayacı güncellendi!");
+        }
+
+        async function updateFooter() {
+            const teaStock = document.getElementById('tea-stock-input').value;
+            const teaTimes = document.getElementById('tea-times-input').value;
+            const teaMoney = document.getElementById('tea-money-input').value;
+
+            await fetch('/update-footer', { 
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ tea_stock: teaStock, tea_times: teaTimes, tea_money: teaMoney })
+            });
+            alert("Alt kısım bilgileri güncellendi!");
+        }
+    </script>
+</body>
 </html>
+
