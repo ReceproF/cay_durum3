@@ -1,1 +1,0 @@
-# cay_durum3
